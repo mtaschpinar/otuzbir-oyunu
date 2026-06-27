@@ -33,8 +33,8 @@ export default function ChatBubbles({ lastChat, myId }: ChatBubblesProps) {
           key={b.id}
           className={`chat-bubble-in rounded-2xl px-3.5 py-2 shadow-lg border text-sm max-w-full ${
             b.mine
-              ? "bg-primary text-primary-foreground border-primary rounded-br-sm"
-              : "bg-card text-card-foreground border-border rounded-bl-sm"
+              ? "bg-emerald-500 text-white border-emerald-400 rounded-br-sm"
+              : "bg-amber-500 text-white border-amber-400 rounded-bl-sm"
           }`}
         >
           <span className="block text-[10px] font-bold opacity-70 leading-none mb-0.5">

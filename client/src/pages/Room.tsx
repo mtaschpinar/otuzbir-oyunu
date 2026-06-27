@@ -470,7 +470,7 @@ export default function Room() {
 
       {/* Alt sabit etkileşim barı (oyun sırasında herkes - oyuncu ve izleyici) */}
       {inGame && (
-        <div className="fixed bottom-0 inset-x-0 z-[57] border-t border-border bg-background/85 backdrop-blur">
+        <div className="fixed bottom-0 inset-x-0 z-[57] border-t border-amber-400/30 bg-background/90 backdrop-blur">
           <div className="max-w-2xl mx-auto px-4 py-2.5 flex items-center justify-center">
             <ReactionBar onReaction={sendReaction} onChat={sendChat} />
           </div>

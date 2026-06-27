@@ -25,7 +25,7 @@ export default function ReactionBar({ onReaction, onChat }: ReactionBarProps) {
           <button
             key={e}
             onClick={() => onReaction(e)}
-            className="num-cell w-9 h-9 text-lg bg-card/60 border border-border hover:bg-card active:scale-90"
+            className="num-cell w-9 h-9 text-lg bg-amber-500/20 border border-amber-400/50 hover:bg-amber-500/40 active:scale-90"
             aria-label={`${e} gönder`}
           >
             {e}
@@ -36,8 +36,8 @@ export default function ReactionBar({ onReaction, onChat }: ReactionBarProps) {
       {/* Tüm emojiler */}
       <Popover>
         <PopoverTrigger asChild>
-          <Button variant="outline" size="icon" className="h-9 w-9 bg-card/60 shrink-0">
-            <Smile className="h-4 w-4" />
+          <Button variant="outline" size="icon" className="h-9 w-9 bg-amber-500/20 border-amber-400/50 hover:bg-amber-500/40 shrink-0">
+            <Smile className="h-4 w-4 text-amber-300" />
           </Button>
         </PopoverTrigger>
         <PopoverContent className="w-auto p-2" align="end">
@@ -58,8 +58,8 @@ export default function ReactionBar({ onReaction, onChat }: ReactionBarProps) {
       {/* Hazır sohbet mesajları */}
       <Popover open={chatOpen} onOpenChange={setChatOpen}>
         <PopoverTrigger asChild>
-          <Button variant="outline" size="icon" className="h-9 w-9 bg-card/60 shrink-0">
-            <MessageCircle className="h-4 w-4" />
+          <Button variant="outline" size="icon" className="h-9 w-9 bg-emerald-500/20 border-emerald-400/50 hover:bg-emerald-500/40 shrink-0">
+            <MessageCircle className="h-4 w-4 text-emerald-300" />
           </Button>
         </PopoverTrigger>
         <PopoverContent className="w-56 p-2" align="end">

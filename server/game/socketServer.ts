@@ -20,6 +20,49 @@ import { TURN_DURATION_SEC, type Announcement } from "../../shared/gameTypes";
 // Tüm odalar sunucu belleğinde tutulur (Reserved Hosting tek süreç)
 const rooms = new Map<string, Room>();
 
+// Rastgele anons varyasyonları
+const TURN_TEXTS = [
+  (name: string) => `${name}! Haydi aslanım, göster kendini!`,
+  (name: string) => `${name}! Sıra sende patron, ne yapacaksın?`,
+  (name: string) => `${name}! Hadi bakalım, cesaretini görelim!`,
+  (name: string) => `${name}! Şov zamanı geldi, sahne senin!`,
+  (name: string) => `${name}! Korkma be, at bi sayı!`,
+  (name: string) => `${name}! Düşün taşın, akıllıca oyna!`,
+  (name: string) => `${name}! Herkes sana bakıyor, hadi!`,
+  (name: string) => `${name}! Nefesler tutuldu, sıra sende!`,
+];
+
+const SAVED_TEXTS = [
+  (name: string) => `${name} kaçtı gitti! Bir daha görüşmeyiz!`,
+  (name: string) => `${name} kurtuldu! Elveda dostum!`,
+  (name: string) => `${name} sıyırdı! Şanslı herif!`,
+  (name: string) => `${name} paçayı kurtardı! Rahat ol artık!`,
+  (name: string) => `${name} özgür! Geride kalanlar düşünsün!`,
+  (name: string) => `${name} uçtu gitti! Ceza yok sana!`,
+];
+
+const NO_MATCH_TEXTS = [
+  "Boşa gitti be! Kimse yok burada!",
+  "Havaya attın! Bu sayı kimsede yok!",
+  "Boş çıktı! Devam ediyoruz!",
+  "Rüzgara söyledin! Kimsede yok bu sayı!",
+  "Iskaladın! Sıradaki düşünsün!",
+  "Boşluk! Kimse düşmedi!",
+];
+
+const LOSER_TEXTS = [
+  (name: string) => `Eyvaaah! ${name} yandı! Ceza vakti geldi dostum!`,
+  (name: string) => `${name} battı! Herkes gülsün, ceza onda!`,
+  (name: string) => `Vay vay vay! ${name} son kalan! Ceza senin!`,
+  (name: string) => `${name} mahkum oldu! Cezadan kaçış yok!`,
+  (name: string) => `Geçmiş olsun ${name}! Ceza çarkı dönecek!`,
+  (name: string) => `${name} yapayalnız kaldı! Ceza zamanı!`,
+];
+
+function randomPick<T>(arr: T[]): T {
+  return arr[Math.floor(Math.random() * arr.length)];
+}
+
 // socketId -> { roomCode, playerId } eşlemesi (disconnect için)
 const socketIndex = new Map<string, { roomCode: string; playerId: string }>();
 
@@ -45,7 +88,7 @@ function announceTurn(io: SocketIOServer, room: Room) {
   if (!player) return;
   emitAnnouncement(io, room, {
     type: "turn",
-    text: `${player.name}! Haydi aslanım, göster kendini!`,
+    text: randomPick(TURN_TEXTS)(player.name),
     name: player.name,
     playerId: player.id,
   });
@@ -75,7 +118,7 @@ function scheduleTurnTimeout(io: SocketIOServer, room: Room) {
     if (result.savedName) {
       emitAnnouncement(io, current, {
         type: "saved",
-        text: `${result.savedName} kaçtı gitti! Bir daha görüşmeyiz!`,
+        text: randomPick(SAVED_TEXTS)(result.savedName),
         name: result.savedName,
         playerId: result.savedId ?? undefined,
         number: result.number,
@@ -83,7 +126,7 @@ function scheduleTurnTimeout(io: SocketIOServer, room: Room) {
     } else {
       emitAnnouncement(io, current, {
         type: "no-match",
-        text: "Boşa gitti be! Kimse yok burada!",
+        text: randomPick(NO_MATCH_TEXTS),
         number: result.number,
       });
     }
@@ -117,7 +160,7 @@ function announceLoser(io: SocketIOServer, room: Room) {
   if (!loser) return;
   emitAnnouncement(io, room, {
     type: "loser",
-    text: `Eyvaaah! ${loser.name} yandı! Ceza vakti geldi dostum!`,
+    text: randomPick(LOSER_TEXTS)(loser.name),
     name: loser.name,
     playerId: loser.id,
   });
@@ -295,7 +338,7 @@ export function registerSocketServer(httpServer: HttpServer) {
         if (result.savedName) {
           emitAnnouncement(io, room, {
             type: "saved",
-            text: `${result.savedName} kaçtı gitti! Bir daha görüşmeyiz!`,
+            text: randomPick(SAVED_TEXTS)(result.savedName),
             name: result.savedName,
             playerId: result.savedId ?? undefined,
             number: result.number,
@@ -303,7 +346,7 @@ export function registerSocketServer(httpServer: HttpServer) {
         } else {
           emitAnnouncement(io, room, {
             type: "no-match",
-            text: "Boşa gitti be! Kimse yok burada!",
+            text: randomPick(NO_MATCH_TEXTS),
             number: result.number,
           });
         }

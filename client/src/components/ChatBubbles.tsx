@@ -17,7 +17,7 @@ export default function ChatBubbles({ lastChat, myId }: ChatBubblesProps) {
   useEffect(() => {
     if (!lastChat) return;
     const item: VisibleChat = { ...lastChat, mine: lastChat.fromId === myId };
-    setBubbles((prev) => [...prev.slice(-4), item]);
+    setBubbles((prev) => [...prev.slice(-2), item]);
     const t = setTimeout(() => {
       setBubbles((prev) => prev.filter((b) => b.id !== item.id));
     }, 4500);
@@ -27,7 +27,7 @@ export default function ChatBubbles({ lastChat, myId }: ChatBubblesProps) {
   if (bubbles.length === 0) return null;
 
   return (
-    <div className="fixed bottom-24 right-3 z-[58] flex flex-col items-end gap-2 max-w-[75vw] pointer-events-none">
+    <div className="fixed top-16 right-3 z-[58] flex flex-col items-end gap-1.5 max-w-[50vw] pointer-events-none">
       {bubbles.map((b) => (
         <div
           key={b.id}

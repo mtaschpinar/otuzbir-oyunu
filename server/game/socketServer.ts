@@ -45,7 +45,7 @@ function announceTurn(io: SocketIOServer, room: Room) {
   if (!player) return;
   emitAnnouncement(io, room, {
     type: "turn",
-    text: `${player.name} sıra sende kardeş!`,
+    text: `${player.name}! Haydi aslanım, göster kendini!`,
     name: player.name,
     playerId: player.id,
   });
@@ -75,7 +75,7 @@ function scheduleTurnTimeout(io: SocketIOServer, room: Room) {
     if (result.savedName) {
       emitAnnouncement(io, current, {
         type: "saved",
-        text: `${result.savedName} götü kurtardı!`,
+        text: `${result.savedName} kaçtı gitti! Bir daha görüşmeyiz!`,
         name: result.savedName,
         playerId: result.savedId ?? undefined,
         number: result.number,
@@ -83,7 +83,7 @@ function scheduleTurnTimeout(io: SocketIOServer, room: Room) {
     } else {
       emitAnnouncement(io, current, {
         type: "no-match",
-        text: "Bu sayı kimsede yok",
+        text: "Boşa gitti be! Kimse yok burada!",
         number: result.number,
       });
     }
@@ -117,7 +117,7 @@ function announceLoser(io: SocketIOServer, room: Room) {
   if (!loser) return;
   emitAnnouncement(io, room, {
     type: "loser",
-    text: `${loser.name} battı! Herkes rahat, ceza bu arkadaşta!`,
+    text: `Eyvaaah! ${loser.name} yandı! Ceza vakti geldi dostum!`,
     name: loser.name,
     playerId: loser.id,
   });
@@ -295,7 +295,7 @@ export function registerSocketServer(httpServer: HttpServer) {
         if (result.savedName) {
           emitAnnouncement(io, room, {
             type: "saved",
-            text: `${result.savedName} götü kurtardı!`,
+            text: `${result.savedName} kaçtı gitti! Bir daha görüşmeyiz!`,
             name: result.savedName,
             playerId: result.savedId ?? undefined,
             number: result.number,
@@ -303,7 +303,7 @@ export function registerSocketServer(httpServer: HttpServer) {
         } else {
           emitAnnouncement(io, room, {
             type: "no-match",
-            text: "Bu sayı kimsede yok",
+            text: "Boşa gitti be! Kimse yok burada!",
             number: result.number,
           });
         }

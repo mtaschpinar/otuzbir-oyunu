@@ -404,7 +404,9 @@ export default function Room() {
             <div className="rounded-2xl bg-card/50 border border-border px-4 py-3 space-y-2">
               <p className="text-sm text-center">
                 {myTurn ? (
-                  <span className="font-bold text-primary">Sıra sende, kardeş! 🎯</span>
+                  <span className="font-black text-neon-green drop-shadow-[0_0_8px_rgba(57,255,20,0.5)]">
+                    Sıra sende, kardeş! 🎯
+                  </span>
                 ) : (
                   <>
                     Sıra{" "}

@@ -28,12 +28,26 @@ export default function NumberBoard({
             key={cell.number}
             type="button"
             disabled={!clickable}
-            onClick={() => clickable && onPick?.(cell.number)}
+            onClick={(e) => {
+              if (!clickable) return;
+              const el = e.currentTarget;
+              el.classList.remove("num-pop");
+              // reflow ile animasyonu yeniden tetikle
+              void el.offsetWidth;
+              el.classList.add("num-pop");
+              onPick?.(cell.number);
+            }}
+            onAnimationEnd={(e) => e.currentTarget.classList.remove("num-pop")}
             title={
               cell.mark === "green"
                 ? `${cell.saidByName} söyledi → ${cell.eliminatedName} kurtuldu`
                 : cell.mark === "red"
                 ? `${cell.saidByName} söyledi → kimse çıkmadı`
+                : undefined
+            }
+            style={
+              clickable
+                ? { animationDelay: `${(cell.number % 8) * 90}ms` }
                 : undefined
             }
             className={cn(
@@ -45,7 +59,7 @@ export default function NumberBoard({
               cell.mark === "green" &&
                 "bg-emerald-500/15 border-emerald-500/40 text-emerald-400",
               clickable &&
-                "hover:bg-primary/30 hover:border-primary cursor-pointer",
+                "hover:bg-primary/30 hover:border-primary cursor-pointer attention-glow",
               isOwnSecret && !used && "opacity-30 cursor-not-allowed",
               !clickable && !used && "cursor-default"
             )}

@@ -21,17 +21,17 @@ export default function EmojiRain({ reaction }: EmojiRainProps) {
 
   useEffect(() => {
     if (!reaction) return;
-    // Tek reaksiyon için 3-5 emoji yağdır
-    const count = 4;
+    // Tek reaksiyon için daha bol emoji yağdır (gösterişli)
+    const count = 8;
     const created: FloatingEmoji[] = [];
     for (let i = 0; i < count; i++) {
       created.push({
         id: `${reaction.id}_${i}`,
         emoji: reaction.emoji,
         fromName: reaction.fromName,
-        left: 20 + Math.random() * 60,
-        drift: (Math.random() - 0.5) * 120,
-        duration: 2.2 + Math.random() * 1.2,
+        left: 10 + Math.random() * 80,
+        drift: (Math.random() - 0.5) * 160,
+        duration: 2.0 + Math.random() * 1.6,
       });
     }
     setItems((prev) => [...prev, ...created]);
@@ -57,7 +57,9 @@ export default function EmojiRain({ reaction }: EmojiRainProps) {
             animation: `emoji-float ${it.duration}s ease-out forwards`,
           }}
         >
-          <span className="text-4xl drop-shadow-lg">{it.emoji}</span>
+          <span className="text-5xl drop-shadow-[0_0_10px_rgba(168,85,247,0.6)]">
+            {it.emoji}
+          </span>
         </div>
       ))}
     </div>

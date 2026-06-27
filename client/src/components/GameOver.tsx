@@ -20,8 +20,8 @@ export default function GameOver({ state, myId, isHost, onRematch, onLeave }: Ga
     .sort((a, b) => (a.rank ?? 99) - (b.rank ?? 99));
 
   return (
-    <div className="relative">
-      {/* Kaybeden için tam ekran kırmızı yanıp sönme */}
+    <div className={iAmLoser ? "relative ceza-shake" : "relative"}>
+      {/* Kaybeden için tam ekran kırmızı dramatik yanıp sönme + titreşim */}
       {iAmLoser && (
         <div className="ceza-flash fixed inset-0 z-[40] pointer-events-none" />
       )}

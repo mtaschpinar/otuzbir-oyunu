@@ -34,7 +34,8 @@ export default function PlayerList({ state, myId }: PlayerListProps) {
                   ? "bg-emerald-500/30 text-emerald-300"
                   : p.eliminated
                   ? "bg-muted text-muted-foreground"
-                  : "bg-primary/30 text-primary"
+                  : "bg-primary/30 text-primary",
+                isTurn && "avatar-pulse ring-2 ring-primary"
               )}
             >
               {p.name.charAt(0).toUpperCase()}

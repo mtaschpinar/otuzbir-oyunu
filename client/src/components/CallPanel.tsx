@@ -55,8 +55,8 @@ export default function CallPanel({
 
   return (
     <>
-      <div className="rounded-2xl bg-primary/15 border border-primary/40 px-4 py-3 text-center glow-pulse">
-        <p className="text-sm font-bold text-primary">Sıra sende!</p>
+      <div className="rounded-2xl bg-primary/20 border border-neon-green/50 px-4 py-3 text-center glow-pulse">
+        <p className="text-base font-black text-neon-green drop-shadow-[0_0_8px_rgba(57,255,20,0.5)]">Sıra sende! ⚡</p>
         <p className="text-xs text-muted-foreground mt-0.5">
           Tahtadan bir sayı seç (kendi gizli sayını söyleyemezsin)
         </p>

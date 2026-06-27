@@ -76,7 +76,14 @@ export default function SecretPicker({
           <button
             key={n}
             type="button"
-            onClick={() => setSelected(n)}
+            onClick={(e) => {
+              const el = e.currentTarget;
+              el.classList.remove("num-pop");
+              void el.offsetWidth;
+              el.classList.add("num-pop");
+              setSelected(n);
+            }}
+            onAnimationEnd={(e) => e.currentTarget.classList.remove("num-pop")}
             className={cn(
               "num-cell text-base sm:text-lg border",
               selected === n

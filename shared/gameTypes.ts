@@ -6,7 +6,7 @@ export const MIN_PLAYERS = 2;
 export const MAX_PLAYERS = 15;
 
 /** Sırası gelen oyuncuya tanınan süre (saniye) */
-export const TURN_DURATION_SEC = 18;
+export const TURN_DURATION_SEC = 25;
 
 /** Oyun aşamaları */
 export type GamePhase =

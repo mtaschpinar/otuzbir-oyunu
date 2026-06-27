@@ -29,7 +29,7 @@ async function startServer() {
   registerSocketServer(server);
 
   // Production: statik dosyaları sun
-  const staticDir = path.join(__dirname, "../../dist/public");
+  const staticDir = path.join(__dirname, "public");
   app.use(express.static(staticDir));
 
   // SPA fallback

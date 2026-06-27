@@ -10,8 +10,9 @@ import ReactionBar from "@/components/ReactionBar";
 import SecretPicker from "@/components/SecretPicker";
 import TurnTimer from "@/components/TurnTimer";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { useGame } from "@/hooks/useGame";
-import { getPlayerId } from "@/lib/socket";
+import { getPlayerId, getStoredName, setStoredName } from "@/lib/socket";
 import { MIN_PLAYERS } from "@shared/gameTypes";
 import {
   Check,
@@ -35,6 +36,40 @@ export default function Room() {
   const [, setLocation] = useLocation();
   const myId = getPlayerId();
 
+  // İsim girme durumu: localStorage'da isim yoksa önce isim sor
+  const [nameReady, setNameReady] = useState<boolean>(() => {
+    const stored = getStoredName();
+    return stored.trim().length > 0;
+  });
+  const [nameInput, setNameInput] = useState("");
+  const [nameError, setNameError] = useState("");
+  const nameInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (!nameReady && nameInputRef.current) {
+      nameInputRef.current.focus();
+    }
+  }, [nameReady]);
+
+  const handleNameSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const trimmed = nameInput.trim();
+    if (!trimmed) {
+      setNameError("Lütfen bir isim gir.");
+      return;
+    }
+    if (trimmed.length < 2) {
+      setNameError("İsim en az 2 karakter olmalı.");
+      return;
+    }
+    if (trimmed.length > 20) {
+      setNameError("İsim en fazla 20 karakter olabilir.");
+      return;
+    }
+    setStoredName(trimmed);
+    setNameReady(true);
+  };
+
   const {
     state,
     connected,
@@ -53,7 +88,7 @@ export default function Room() {
     sendChat,
     rematch,
     leave,
-  } = useGame(roomCode);
+  } = useGame(nameReady ? roomCode : "");
 
   const [copied, setCopied] = useState(false);
   const [pendingNumber, setPendingNumber] = useState<number | null>(null);
@@ -136,6 +171,64 @@ export default function Room() {
     leave();
     setLocation("/");
   };
+
+  // === İSİM GİRME EKRANI ===
+  if (!nameReady) {
+    return (
+      <div className="game-bg min-h-screen flex items-center justify-center px-4">
+        <div className="w-full max-w-sm">
+          <div className="text-center mb-8">
+            <div className="inline-flex w-20 h-20 rounded-3xl bg-primary/20 border-2 border-primary/40 items-center justify-center mb-4 glow-pulse">
+              <span className="text-3xl font-black text-primary">31</span>
+            </div>
+            <h1 className="text-2xl font-black mb-1">Odaya Katıl</h1>
+            <p className="text-muted-foreground text-sm">
+              Oda kodu:{" "}
+              <span className="font-black tracking-widest text-primary text-base">{roomCode}</span>
+            </p>
+          </div>
+
+          <form onSubmit={handleNameSubmit} className="space-y-4">
+            <div>
+              <label className="text-sm font-semibold mb-1.5 block">İsmin ne?</label>
+              <Input
+                ref={nameInputRef}
+                value={nameInput}
+                onChange={(e) => {
+                  setNameInput(e.target.value);
+                  setNameError("");
+                }}
+                placeholder="Adını yaz..."
+                maxLength={20}
+                className="h-12 text-base text-center font-semibold tracking-wide"
+                autoComplete="off"
+                autoFocus
+              />
+              {nameError && (
+                <p className="text-destructive text-xs mt-1.5 text-center">{nameError}</p>
+              )}
+            </div>
+
+            <Button
+              type="submit"
+              className="w-full h-12 font-bold text-base"
+              disabled={!nameInput.trim()}
+            >
+              Odaya Katıl →
+            </Button>
+
+            <button
+              type="button"
+              onClick={() => setLocation("/")}
+              className="w-full text-center text-sm text-muted-foreground hover:text-foreground transition-colors"
+            >
+              Ana sayfaya dön
+            </button>
+          </form>
+        </div>
+      </div>
+    );
+  }
 
   if (!state) {
     return (

@@ -1,5 +1,5 @@
 import { getPlayerId, getSocket, getStoredName } from "@/lib/socket";
-import { getSoundEnabled, speak, vibrate } from "@/lib/speech";
+import { getSoundEnabled, speak, vibrate, unlockSpeech } from "@/lib/speech";
 import {
   getMusicEnabled,
   playLoseSound,
@@ -154,12 +154,14 @@ export function useGame(roomCode: string): UseGameResult {
   }, [state, musicEnabled, myId]);
 
   const startGame = useCallback(() => {
-    // İlk kullanıcı etkileşimi: AudioContext'i uyandır
+    // İlk kullanıcı etkileşimi: AudioContext ve TTS'i uyandır
+    unlockSpeech();
     if (getMusicEnabled()) startMusic();
     getSocket().emit("startGame", (_res: { ok: boolean; error?: string }) => {});
   }, []);
 
   const confirmSecret = useCallback((n: number) => {
+    unlockSpeech();
     if (getMusicEnabled()) startMusic();
     return new Promise<{ ok: boolean; error?: string }>((resolve) => {
       getSocket().emit("confirmSecret", { secret: n }, (res: { ok: boolean; error?: string }) =>
@@ -169,6 +171,7 @@ export function useGame(roomCode: string): UseGameResult {
   }, []);
 
   const callNumber = useCallback((n: number) => {
+    unlockSpeech();
     return new Promise<{ ok: boolean; error?: string }>((resolve) => {
       getSocket().emit("callNumber", { number: n }, (res: { ok: boolean; error?: string }) =>
         resolve(res)
